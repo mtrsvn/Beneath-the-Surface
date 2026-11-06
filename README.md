@@ -28,3 +28,9 @@ The food-and-culture and community-learning sections are paraphrased from the su
 - Chapter V, agricultural recommendations: demonstrations of permitted fishing practices, annual fishing moratorium and seasonal restrictions, and crafts, illustrations, and educational materials that do not require fish harvesting.
 
 Suggested experiences remain subject to local arrangements. No particular tour, festival programme, recipe, price, date, or souvenir stock is represented as confirmed. Source mapping is for maintainers and is not displayed on the public page.
+
+The quick facts summarize species habitat, endemism, conservation, and livelihoods. The expanded threats section paraphrases the manuscript’s environmental discussion (Definitions and Chapter IV): overexploitation, pollution, habitat degradation, and introduced fish species. The static visitor checklist consolidates the manuscript’s recommendations for visitor information, conservation education, community participation, and responsible practices. It is not a questionnaire and collects no data. No quantitative threat estimates, medical claims, current restriction dates, or guaranteed local services are added.
+
+## Interaction checks
+
+Run npm test for the DOM interaction checks: menu focus trapping and Escape, section focus after navigation, scroll-lock cleanup, switching to desktop, FAQ state after repeated clicks, active section navigation, and link targets. These checks do not replace a visual browser review.
