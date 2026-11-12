@@ -46,7 +46,7 @@ afterEach(async () => {
 test('renders all navigation destinations and accessible FAQ control relationships', () => {
   assert.equal(document.querySelectorAll('h1').length, 1);
   const links = [...document.querySelectorAll('#mobile-navigation a')];
-  assert.equal(links.length, 4);
+  assert.equal(links.length, 5);
   for (const link of document.querySelectorAll('a[href^="#"]')) {
     assert.ok(document.getElementById(link.hash.slice(1)), `Missing destination ${link.hash}`);
   }
@@ -128,7 +128,7 @@ test('menu cleanup preserves pre-existing scroll settings and inert state', asyn
   assert.ok(!document.querySelector('main').hasAttribute('inert'));
 });
 
-test('scroll reveal animates only entering content and cancels motion when reduced motion is enabled', async () => {
+test('hero entrances are staggered, sections reveal on entry, and reduced motion cancels both', async () => {
   const observed = new Set();
   const calls = [];
   let callback, disconnected = false;
@@ -145,6 +145,10 @@ test('scroll reveal animates only entering content and cancels motion when reduc
   };
   await act(async () => root.render(React.createElement(App, { key: 'animated' })));
   assert.ok(observed.size > 0);
+  const heroCalls = calls.splice(0);
+  assert.equal(heroCalls.length, 8);
+  assert.ok(heroCalls.every(call => call.element.closest('.hero')));
+  for (let i = 1; i < heroCalls.length; i++) assert.ok(heroCalls[i].options.delay > heroCalls[i - 1].options.delay);
   assert.equal(calls.length, 0);
   const content = document.querySelector('.intro-copy');
   assert.equal(content.style.opacity, '');
@@ -157,6 +161,7 @@ test('scroll reveal animates only entering content and cancels motion when reduc
   await interact(() => { media.matches = true; for (const fn of media.listeners) fn(); });
   assert.ok(disconnected);
   assert.ok(calls[0].animation.cancelled);
+  assert.ok(heroCalls.every(call => call.animation.cancelled));
   assert.equal(content.style.opacity, '');
 });
 
