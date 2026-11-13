@@ -9,8 +9,10 @@ import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 
 const require = createRequire(import.meta.url);
+const visitorInfo = JSON.parse(await readFile(new URL('../src/visitor-info.json', import.meta.url), 'utf8'));
 let source = await readFile(new URL('../src/main.jsx', import.meta.url), 'utf8');
 source = source.replace("import './style.css';", '')
+  .replace("import visitorTips from './visitor-info.json';", `const visitorTips = ${JSON.stringify(visitorInfo)};`)
   .replace("from 'react'", `from '${pathToFileURL(require.resolve('react')).href}'`)
   .replace("from 'react-dom/client'", `from '${pathToFileURL(require.resolve('react-dom/client')).href}'`)
   .replace("createRoot(document.getElementById('root')).render(<App/>);", 'export { App };');
@@ -46,7 +48,7 @@ afterEach(async () => {
 test('renders all navigation destinations and accessible FAQ control relationships', () => {
   assert.equal(document.querySelectorAll('h1').length, 1);
   const links = [...document.querySelectorAll('#mobile-navigation a')];
-  assert.equal(links.length, 5);
+  assert.equal(links.length, 4);
   for (const link of document.querySelectorAll('a[href^="#"]')) {
     assert.ok(document.getElementById(link.hash.slice(1)), `Missing destination ${link.hash}`);
   }
@@ -54,6 +56,23 @@ test('renders all navigation destinations and accessible FAQ control relationshi
     assert.ok(document.getElementById(button.getAttribute('aria-controls')));
   }
   for (const link of document.querySelectorAll('a[target="_blank"]')) assert.ok(link.rel.includes('noopener'));
+});
+
+test('visitor guide includes all six source dimensions and their complete information', async () => {
+  const items = [...document.querySelectorAll('.guide-item')];
+  assert.equal(items.length, 6);
+  for (const [index, item] of items.entries()) {
+    const info = visitorInfo[index];
+    assert.ok(item.querySelector('h3').textContent.includes(info.title));
+    assert.equal(item.querySelector('.guide-topic').textContent, info.heading);
+    await interact(() => item.querySelector('button').click());
+    assert.equal(item.querySelector('.guide-answer-panel').getAttribute('aria-hidden'), 'false');
+    assert.equal(item.querySelector('.guide-description').textContent, info.description);
+    const detail = [...item.querySelectorAll('.guide-detail')].map(p => p.textContent).join(' ');
+    const normalize = text => text.replace(/\s+/g, ' ').trim();
+    assert.equal(normalize(detail), normalize(info.paragraphs.join(' ')));
+  }
+  assert.equal(document.getElementById('dimensions'), null);
 });
 
 test('mobile menu locks the background, wraps keyboard focus, and restores focus on Escape', async () => {

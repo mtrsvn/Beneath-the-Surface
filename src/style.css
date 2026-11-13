@@ -612,6 +612,53 @@ a, button, summary {
   line-height: 1.9;
   margin: 0;
 }
+.guide-answer h4 {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 22px 0 12px;
+}
+.guide-answer p + p {
+  margin-top: 16px;
+}
+.discovery-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 24px 0;
+}
+.discovery-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.discovery-links a:hover { border-color: var(--sage); }
+.guide-topic { display: block; }
+.guide-item .guide-trigger .guide-preview {
+  display: block;
+  font: 400 13px/1.6 var(--sans);
+  color: var(--muted);
+  margin-top: 8px;
+}
+.guide-answer p.guide-highlight {
+  font: 400 25px/1.45 var(--serif);
+  color: var(--ink);
+  padding-left: 18px;
+  border-left: 2px solid var(--sage);
+  margin-bottom: 22px;
+}
+.guide-photo { margin-top: 32px; max-width: 360px; }
+.guide-photo img { height: 200px; border-radius: 2px; }
+.guide-photo figcaption {
+  font: italic 22px/1.4 var(--serif);
+  margin-top: 12px;
+  color: var(--sage);
+}
+@media (max-width: 900px) {
+  .guide-photo { display: none; }
+}
 /* Footer */
 .site-footer {
   background: #e6e9df;
